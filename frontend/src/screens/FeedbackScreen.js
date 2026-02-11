@@ -1,33 +1,28 @@
 import React, { useState } from "react";
-import { View, Alert } from "react-native";
-import CustomInput from "../components/CustomInput";
-import CustomButton from "../components/CustomButton";
-import api from "../services/apiService";
+import { View, Text, TouchableOpacity } from "react-native";
 
 export default function FeedbackScreen() {
-  const [feedback, setFeedback] = useState("");
-
-  const submitFeedback = async () => {
-    try {
-      await api.post("/feedback", {
-        message: feedback,
-        rating: 5,
-      });
-      Alert.alert("Success", "Feedback Submitted");
-      setFeedback("");
-    } catch (error) {
-      Alert.alert("Error", "Submission Failed");
-    }
-  };
+  const [rating, setRating] = useState(0);
 
   return (
-    <View style={{ padding: 20 }}>
-      <CustomInput
-        placeholder="Enter your feedback"
-        value={feedback}
-        onChangeText={setFeedback}
-      />
-      <CustomButton title="Submit Feedback" onPress={submitFeedback} />
+    <View style={{ flex: 1, padding: 20, backgroundColor: "#F5F7FA" }}>
+      
+      <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
+        Rate Your Subject
+      </Text>
+
+      <View style={{ flexDirection: "row", marginBottom: 30 }}>
+        {[1, 2, 3, 4, 5].map((star) => (
+          <TouchableOpacity key={star} onPress={() => setRating(star)}>
+            <Text style={{ fontSize: 32 }}>
+              {star <= rating ? "⭐" : "☆"}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      <Text>Your Rating: {rating}</Text>
+
     </View>
   );
 }
